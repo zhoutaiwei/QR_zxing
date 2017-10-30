@@ -23,6 +23,7 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
@@ -43,13 +44,18 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 		  hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
 		  // 设置二维码纠错能力级别为H（最高）
 		  hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+		  //设置设置二维码版本，取值范围1-40，值越大尺寸越大，可存储的信息越大
+		  hints.put(EncodeHintType.QR_VERSION, 15);
 		  BitMatrix byteMatrix = null;
 		  try {
 		   // 生成二维码
 		   byteMatrix = new MultiFormatWriter().encode(content,
 		     BarcodeFormat.QR_CODE, width, height, hints);
 		   File file = new File(imagePath);
-		   MatrixToImageWriter.writeToFile(byteMatrix, "png", file);
+		 //  MatrixToImageWriter.writeToFile(byteMatrix, "png", file);
+		   //给二维码设置颜色，第一个参数为前景色（二维码颜色）,第二个参数为背景色（白色）
+		   MatrixToImageConfig config = new MatrixToImageConfig(0Xff962896, 0Xffffffff);
+		   MatrixToImageWriter.writeToFile(byteMatrix, "png", file, config);
 		  } catch (IOException e) {
 		   e.printStackTrace();
 		  } catch (WriterException e) {
@@ -264,13 +270,13 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 		  /**部分一开始***********生成常规二维码*************/
 		  //二维码内容
-		  String content = "http://weibo.com/sdtvwp";
+		  String content = "哈哈哈";
 		  //二维码宽度
 		  int width = 300;
 		  //二维码高度
 		  int height = 300;
 		  //二维码存放地址
-		  String imagePath = "d:/thatway_weibo.png";
+		  String imagePath = "d:/qr_test.png";
 		  //生成二维码,返回的是生成好的二维码图片的所在路径
 		  String qrImgPath = QRUtil.encode(content, width, height, imagePath);
 		  /**部分一结束***********如果生成不带图片的二维码，到这步已经完成了*************/
